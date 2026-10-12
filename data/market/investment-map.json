@@ -1,0 +1,74 @@
+{
+  "version": "0.1",
+  "title": "投资地图：一件事，为什么影响不同资产？",
+  "lead": "不要背“事件 = 涨跌”。选择一个事件，沿着资金成本、现金流和预期一步步看它如何传导。",
+  "methodology": "地图展示的是常见机制与需要验证的条件，不是实时信号、价格预测或配置建议。同一事件在不同增长、通胀、估值和仓位环境下，结果可能相反。",
+  "paths": [
+    {
+      "id": "long-rate-rise",
+      "event": "长期利率上行",
+      "eventQuestion": "十年期国债收益率上升时，资产为什么会重新定价？",
+      "plainLanguage": "借钱和等待未来回报都变得更“贵”。投资者会重新比较：承担风险，是否还比持有高收益的安全资产划算。",
+      "mechanismName": "贴现率与机会成本",
+      "mechanismSteps": ["长期无风险收益率抬升", "未来现金流折回今天时价值下降", "融资成本和持有风险资产的机会成本增加", "估值更依赖远期盈利的资产反应通常更敏感"],
+      "assetEffects": [
+        { "assetClass": "成长型股票", "tendency": "可能承压", "explanation": "价值更多来自较远的未来现金流，对贴现率变化更敏感。" },
+        { "assetClass": "长期债券", "tendency": "可能承压", "explanation": "新发行债券收益率更高时，旧债价格通常需要调整才有吸引力。" },
+        { "assetClass": "现金与短债", "tendency": "可能受益", "explanation": "低波动资产能提供更高利息，机会成本改善。" },
+        { "assetClass": "价值型股票", "tendency": "影响分化", "explanation": "当前现金流较近，但经济走弱或融资成本上升仍会影响盈利。" }
+      ],
+      "counterconditions": [
+        { "condition": "盈利预期同步大幅上修", "consequence": "更强现金流可能抵消贴现率上升，成长股未必下跌。" },
+        { "condition": "收益率上升来自增长改善而非通胀失控", "consequence": "周期类资产可能受益，市场内部表现会分化。" }
+      ],
+      "watchSignals": [
+        { "indicator": "十年期实际利率", "rising": "真实资金成本继续增加，贴现压力更强。", "falling": "名义收益率压力可能主要来自通胀预期，需重新拆分原因。" },
+        { "indicator": "企业远期盈利预期", "rising": "现金流改善可能缓冲估值压力。", "falling": "利率与盈利形成双重压力。" }
+      ]
+    },
+    {
+      "id": "dollar-strength",
+      "event": "美元走强",
+      "eventQuestion": "美元上涨，为什么会越过汇率市场影响黄金和新兴市场？",
+      "plainLanguage": "全球很多商品、债务和融资都用美元计价。美元变贵，会同时改变购买成本、偿债压力和资金去向。",
+      "mechanismName": "美元融资与计价渠道",
+      "mechanismSteps": ["美元资产相对吸引力提高", "全球资金可能回流美元资产", "美元负债换算成本与偿债压力上升", "美元计价商品对非美元买家变贵"],
+      "assetEffects": [
+        { "assetClass": "黄金", "tendency": "可能承压", "explanation": "美元和实际利率一起上行时，无息黄金的持有成本增加。" },
+        { "assetClass": "新兴市场资产", "tendency": "可能承压", "explanation": "资本流出与美元债务压力可能同时出现。" },
+        { "assetClass": "美国短债", "tendency": "可能受益", "explanation": "较高收益与美元流动性可能吸引防御性资金。" },
+        { "assetClass": "资源出口资产", "tendency": "影响分化", "explanation": "美元收入可形成缓冲，但全球需求放缓会削弱它。" }
+      ],
+      "counterconditions": [
+        { "condition": "地缘风险快速升温", "consequence": "美元与黄金可能同时被当作避险资产买入。" },
+        { "condition": "新兴市场拥有充足外汇储备与低美元负债", "consequence": "汇率和资本外流冲击可能明显较弱。" }
+      ],
+      "watchSignals": [
+        { "indicator": "美元指数与实际利率", "rising": "若同步上升，黄金和全球流动性压力更值得关注。", "falling": "美元压力可能正在松动，但仍需看资本流数据。" },
+        { "indicator": "新兴市场非居民资金流", "rising": "资金回流说明汇率压力未必转化为资产抛售。", "falling": "验证美元压力已进入资金层面。" }
+      ]
+    },
+    {
+      "id": "earnings-surprise",
+      "event": "财报好于预期",
+      "eventQuestion": "业绩更好，为什么股价仍可能不涨？",
+      "plainLanguage": "市场在财报前已经为某个结果付过价。真正推动重新定价的，是实际结果与这个预期之间还有多大差距。",
+      "mechanismName": "预期差与估值重估",
+      "mechanismSteps": ["价格提前包含市场对业绩的预测", "财报公布后比较实际交付与隐含预期", "未来指引决定好业绩能否延续", "仓位集中与流动性会放大短期反应"],
+      "assetEffects": [
+        { "assetClass": "公司股票", "tendency": "影响分化", "explanation": "结果取决于超预期幅度、未来指引和此前估值。" },
+        { "assetClass": "同行股票", "tendency": "影响分化", "explanation": "需求验证可能利好同行，竞争加剧或估值锚下移也可能构成压力。" },
+        { "assetClass": "公司债券", "tendency": "可能受益", "explanation": "若现金流和偿债能力改善，信用风险可能下降。" },
+        { "assetClass": "行业供应链", "tendency": "影响分化", "explanation": "订单持续性比单季结果更重要。" }
+      ],
+      "counterconditions": [
+        { "condition": "好业绩早已被高估值充分计入", "consequence": "符合预期也可能触发获利了结和估值压缩。" },
+        { "condition": "财报好但未来指引转弱", "consequence": "历史结果无法支撑未来现金流，价格反应可能偏弱。" }
+      ],
+      "watchSignals": [
+        { "indicator": "未来收入与利润率指引", "rising": "好业绩更可能具有持续性。", "falling": "当前结果可能只是滞后数据。" },
+        { "indicator": "财报前估值与仓位", "rising": "预期门槛和获利了结风险更高。", "falling": "较低预期可能为正向惊喜留出空间。" }
+      ]
+    }
+  ]
+}

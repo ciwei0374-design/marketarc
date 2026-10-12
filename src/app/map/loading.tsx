@@ -1,0 +1,1 @@
+export default function InvestmentMapLoading() { return <main className="investment-map"><section className="map-state" aria-busy="true"><p className="eyebrow">INVESTMENT MAP</p><h1>正在展开传导路径</h1><p>我们正在整理事件、机制和反方条件。</p></section></main>; }

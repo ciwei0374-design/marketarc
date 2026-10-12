@@ -1,0 +1,42 @@
+{
+  "name": "zijian-ai",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test:ai-provider": "node scripts/test-ai-provider.mjs",
+    "test:model-json": "node --experimental-strip-types scripts/test-model-json.mts",
+    "test:link-integrity": "node --experimental-strip-types scripts/test-link-integrity.mts",
+    "test:today-market": "node --experimental-strip-types scripts/test-today-market.mts",
+    "test:investment-map": "node --experimental-strip-types scripts/test-investment-map.mts",
+    "test:full-product": "node scripts/full-product-regression.mjs",
+    "test:secret-scan": "node scripts/secret-scan.mjs",
+    "eval:marketarc": "node scripts/marketarc-eval.mjs",
+    "marketarc:orchestrator": "node scripts/marketarc-orchestrator.mjs",
+    "marketarc:orchestrator:status": "node scripts/marketarc-orchestrator-status.mjs",
+    "marketarc:orchestrator:stop": "node scripts/marketarc-orchestrator-stop.mjs",
+    "marketarc:orchestrator:dry-run": "node scripts/marketarc-orchestrator.mjs --dry-run",
+    "marketarc:orchestrator:live-handshake": "node scripts/marketarc-orchestrator.mjs --live-handshake"
+  },
+  "dependencies": {
+    "next": "^16.3.1",
+    "openai": "^7.4.0",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "4.1.14",
+    "@types/node": "24.7.2",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2",
+    "eslint": "9.37.0",
+    "eslint-config-next": "^16.3.1",
+    "tailwindcss": "4.1.14",
+    "typescript": "5.9.3"
+  }
+}

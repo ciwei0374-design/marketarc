@@ -1,0 +1,69 @@
+{
+  "product": "MarketArc",
+  "controlVersion": "MARKETARC_MANAGER_AUTONOMOUS_DELIVERY_MODE_V1",
+  "mission": {
+    "id": "marketarc-stabilize-polish-expand-v1-2026-08-18",
+    "name": "MARKETARC STABILIZE_POLISH_EXPAND_V1",
+    "source": "human",
+    "status": "COMPLETE",
+    "issuedAt": "2026-08-18T12:49:23+08:00",
+    "scope": ["PHASE_1_STORY_B_JSON_RELIABILITY", "PHASE_2_LINK_INTEGRITY", "PHASE_3_RESPONSIVE_UI_POLISH", "PHASE_4_TODAY_MARKET_V0_1", "PHASE_5_INVESTMENT_MAP_V0_1", "PHASE_6_FULL_PRODUCT_REGRESSION"],
+    "statusPolicy": "Continue without Human intermediate approval unless RED_DECISION_REQUIRED or MISSION_BLOCKED"
+  },
+  "currentPhase": 6,
+  "currentTask": "MARKETARC DELIVERY V1 COMPLETE — awaiting Human review checklist only.",
+  "managerStatus": "COMPLETE",
+  "engineerStatus": "COMPLETE",
+  "lastEngineerResult": {
+    "phase": 6,
+    "name": "FULL_PRODUCT_REGRESSION",
+    "status": "PASS",
+    "fixAttempt": 1,
+    "p0Journey": { "authorization": "PASS", "cachedSubmission": "PASS", "failure": "PASS", "progress": "PASS", "quickTake": "PASS", "storyA": "PASS", "storyBComplete": "PASS", "refreshPersistence": "PASS", "cacheStatus": "PASS" },
+    "reliability": { "capturedFixtures": "PASS", "threeCategory": "3/3 PASS", "brokenRenderedLinks": 0 },
+    "visualCoverage": { "desktop": "1440x1000", "mobile": "390x844", "failedAssets": 0, "horizontalOverflowFailures": 0 },
+    "productSurfaces": { "todayMarket": "PASS", "investmentMap": "PASS" },
+    "apiJobsUsed": 0
+  },
+  "managerDecision": "MISSION_COMPLETE_PASS",
+  "nextAction": "Human may complete the review checklist in DELIVERY_REPORT_V1.md. Do not start another task automatically.",
+  "riskFlags": ["CONTENT_QUALITY_BASELINE_REMAINS_APPROX_70", "TODAY_MARKET_IS_LOCAL_SNAPSHOT", "INVESTMENT_MAP_V0_1_HAS_THREE_PATHS"],
+  "phaseState": {
+    "phase": 6,
+    "checkpoint": "PHASE_COMPLETE",
+    "attempt": 1,
+    "maxFixAttempts": 2,
+    "filesChanged": ["scripts/full-product-regression.mjs", "scripts/secret-scan.mjs", "package.json", "docs/marketarc/DELIVERY_REPORT_V1.md", "docs/marketarc/HANDOFF_TO_CHATGPT.md", "docs/marketarc/NIGHTLY_REPORT.md", "docs/marketarc/CHATGPT_INSTRUCTIONS.md", "docs/marketarc/AUTONOMOUS_STATE.json", "docs/marketarc/ORCHESTRATION_STATE.json"],
+    "apiJobsUsed": 0,
+    "result": "PASS"
+  },
+  "authority": {
+    "productConstitution": "PRODUCT_BRAIN.md",
+    "highestTaskDecision": "HUMAN_DECISION",
+    "managerMode": "AUTONOMOUS_DELIVERY",
+    "greenAuthorized": true,
+    "missionYellowAuthorized": true,
+    "redRequiresHuman": true,
+    "completedOrSupersededInstructionsAreActiveBoundaries": false
+  },
+  "updatedAt": "2026-08-18T18:10:00+08:00",
+  "secretsIncluded": false,
+  "automation": {
+    "version": "MARKETARC_LOCAL_ORCHESTRATOR_V1",
+    "status": "AUTOMATION_READY",
+    "currentProductMission": "WAITING_FOR_NEXT_MANAGER_MISSION",
+    "dryRun": "PASS",
+    "autoWake": "PASS",
+    "managerToEngineer": "PASS",
+    "engineerToManager": "PASS",
+    "humanSecondMessageRequired": false,
+    "threadPersistence": "PASS",
+    "heartbeat": "PASS",
+    "lock": "PASS",
+    "override": "PASS",
+    "stop": "PASS",
+    "crashRecovery": "PASS",
+    "publicDemoPort3001Affected": false,
+    "updatedAt": "2026-08-18T15:36:30+08:00"
+  }
+}

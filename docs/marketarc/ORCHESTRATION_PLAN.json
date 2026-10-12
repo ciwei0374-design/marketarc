@@ -1,0 +1,81 @@
+{
+  "product": "MarketArc",
+  "missionId": "marketarc-stabilize-polish-expand-v1-2026-08-18",
+  "missionName": "MARKETARC STABILIZE_POLISH_EXPAND_V1",
+  "mode": "MARKETARC_MANAGER_AUTONOMOUS_DELIVERY_MODE",
+  "source": "human",
+  "status": "ACTIVE",
+  "phaseOrderLocked": true,
+  "humanInterruptionPolicy": "Only RED_DECISION_REQUIRED or MISSION_BLOCKED",
+  "globalRules": {
+    "requiredReading": ["PRODUCT_BRAIN.md", "01_PRODUCT_PRINCIPLES.md", "AUTONOMY_POLICY.md", "CHATGPT_INSTRUCTIONS.md", "DECISION_QUEUE.md", "ORCHESTRATION_STATE.json", "ORCHESTRATION_PLAN.json"],
+    "preserveUncommittedUserWork": true,
+    "publicDemoPort": 3001,
+    "publicDemoMustNotBeStoppedRestartedOrOccupied": true,
+    "preferredTestPort": 3101,
+    "secretsForbiddenInReports": true,
+    "maximumFixAttemptsPerProblem": 2,
+    "afterPass": "Advance automatically to the next phase and update ORCHESTRATION_STATE.json.",
+    "afterGreenOrYellowFail": "Diagnose, apply one minimal fix, and rerun the affected gate within the retry limit.",
+    "afterRetryLimit": "Mark BLOCKED, determine whether later phases are blocked, and stop if safe progression is impossible.",
+    "afterRed": "Record RED_DECISION_REQUIRED in DECISION_QUEUE.md and stop for Human.",
+    "stateCheckpoints": ["PLANNING", "BUILDING", "TESTING", "REVIEWING", "PHASE_COMPLETE"],
+    "stateFields": ["currentPhase", "currentTask", "managerStatus", "engineerStatus", "lastEngineerResult", "managerDecision", "nextAction", "riskFlags", "updatedAt"]
+  },
+  "redDecisions": ["change model", "change provider", "purchase or introduce paid API/service", "introduce database", "formal user system", "payment or membership", "change product positioning or target user", "stock recommendations or automatic trading", "major investment compliance boundary change", "large-scale brand redesign", "large-scale core schema refactor", "major architecture migration"],
+  "phases": [
+    {
+      "id": 1,
+      "name": "STORY_B_JSON_RELIABILITY",
+      "objective": "Make complex Story B outputs reliably parse, normalize, validate, and recover without sacrificing financial body content or changing the core AnalysisStory meaning.",
+      "allowed": ["read failed samples", "locate parse and validation errors", "JSON normalization", "localized repair", "local schema compatibility", "bounded retry adjustment", "reduce fragile nesting without core schema redesign", "deterministic validation", "safe fallback", "tests and diagnostics"],
+      "forbidden": ["remove important financial content", "change model or provider", "large-scale AnalysisStory schema redesign", "start content-quality candidates before reliability passes"],
+      "passGate": ["root cause documented with failed-sample evidence", "initial parse or bounded repair succeeds for captured Nvidia failures", "final AnalysisStory validation succeeds", "three regression categories pass: company earnings, macro/rates, cross-asset or commodity", "no regression in successful Story A or Story B fixtures", "lint, typecheck, and build pass", "public port 3001 unaffected"],
+      "failPolicy": "Up to two minimal fix attempts; if repeated P0 or same JSON instability remains, mark MISSION_BLOCKED before Phase 2."
+    },
+    {
+      "id": 2,
+      "name": "LINK_INTEGRITY",
+      "objective": "Reduce broken clickable source and CTA links to zero.",
+      "allowed": ["audit rendered links", "validate URLs", "replace broken canonical URLs", "map real URLs from ResearchContext", "remove CTA with no real destination", "add deterministic link tests"],
+      "passGate": ["broken clickable links equals zero in audited Golden and generated stories", "source destinations match displayed source identity", "no fake or placeholder destination remains clickable", "link tests, lint, typecheck, and build pass"],
+      "failPolicy": "Up to two minimal correction attempts; unresolved external-only availability is documented, while locally controllable broken links block phase completion."
+    },
+    {
+      "id": 3,
+      "name": "RESPONSIVE_UI_POLISH",
+      "objective": "Keep the approved visual direction while improving typography, oversized Expectation Gap text, Mental Model mobile layout, overflow, spacing, and full-page responsiveness.",
+      "allowed": ["responsive CSS", "font-size hierarchy", "spacing and grid", "overflow fixes", "mobile layout", "localized component split", "visual regression fixtures"],
+      "forbidden": ["overall redesign", "large-scale brand change"],
+      "passGate": ["desktop experience preserves current visual direction", "Expectation Gap body text is readable and proportionate", "Mental Model works on narrow mobile viewport", "no horizontal page overflow at representative mobile widths", "full-page mobile regression passes for home, loading/progress, and analysis surfaces", "lint, typecheck, and build pass"],
+      "failPolicy": "Up to two localized polish attempts; regressions must be reverted before continuing."
+    },
+    {
+      "id": 4,
+      "name": "TODAY_MARKET_V0_1",
+      "objective": "Deliver the smallest complete beginner-friendly Today Market experience without paid services, new database infrastructure, or scope creep.",
+      "productGuardrails": ["explain what matters and why", "separate fact, inference, and uncertainty", "avoid prediction, recommendation, and guaranteed direction", "reuse current project data and architecture where practical"],
+      "passGate": ["a user can open and understand the Today Market V0.1 surface", "empty, loading, error, and available-data states are understandable", "mobile and desktop layouts pass", "no paid API or database introduced", "lint, typecheck, build, and relevant tests pass"],
+      "failPolicy": "Up to two minimal product or implementation corrections; RED expansion stops for Human."
+    },
+    {
+      "id": 5,
+      "name": "INVESTMENT_MAP_V0_1",
+      "objective": "Deliver a minimal educational Investment Map that helps ordinary investors connect events, mechanisms, and asset classes without recommending trades.",
+      "productGuardrails": ["educational relationships, not deterministic predictions", "conditional logic and counterconditions", "no stock picks or automatic trading", "small complete interaction set"],
+      "passGate": ["users can explore at least the core event-to-mechanism-to-asset relationship", "conditions and limitations are visible", "interaction is usable on desktop and mobile", "no compliance boundary violation", "lint, typecheck, build, and relevant tests pass"],
+      "failPolicy": "Up to two minimal implementation corrections; compliance ambiguity is RED and stops for Human."
+    },
+    {
+      "id": 6,
+      "name": "FULL_PRODUCT_REGRESSION",
+      "objective": "Verify the full MarketArc journey and produce the final delivery evidence.",
+      "passGate": ["access and authorization flow works", "question submission and understandable failure flow work", "Research Progress, Quick Take, Story A, Story B, complete story, refresh persistence, and cache behavior pass", "Story B JSON reliability regression passes across three categories", "broken clickable links equals zero", "desktop and mobile critical journeys pass", "Today Market V0.1 and Investment Map V0.1 pass their product gates", "lint, typecheck, build, tests, and secret scan pass", "public Demo 3001 was not stopped, restarted, or occupied by tests"],
+      "finalOutput": "MARKETARC DELIVERY V1 COMPLETE with sections A-J and a 3-5 item Human review checklist.",
+      "failPolicy": "Perform only localized fixes within previous phase authority and retry limits; otherwise mark MISSION_BLOCKED."
+    }
+  ],
+  "createdAt": "2026-08-18T12:49:23+08:00",
+  "updatedAt": "2026-08-18T12:49:23+08:00",
+  "secretsIncluded": false
+}
