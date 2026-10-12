@@ -4,6 +4,17 @@ function isText(value: unknown): value is string {
   return typeof value === "string" && value.trim().length > 0;
 }
 
+// Local completed jobs remain supported; public snapshots use bundled examples.
+function isAnalysisHref(value: unknown): value is string {
+  if (!isText(value)) return false;
+  if (/^\/analysis\/job\/[a-f0-9-]+$/.test(value)) return true;
+  if (!value.startsWith("/analysis?q=")) return false;
+  const url = new URL(value, "https://marketarc.invalid");
+  return url.pathname === "/analysis" && url.searchParams.size === 1 &&
+    ["美联储为什么降息？", "黄金为什么持续上涨？", "AI 为什么会带动电力需求？"].includes(url.searchParams.get("q") ?? "") &&
+    ["", "#stock-valuation", "#expectations"].includes(url.hash);
+}
+
 function isItem(value: unknown): value is TodayMarketItem {
   if (!value || typeof value !== "object") return false;
   const item = value as Partial<TodayMarketItem>;
@@ -20,7 +31,7 @@ function isItem(value: unknown): value is TodayMarketItem {
     item.variables.every((entry) => isText(entry?.name) && isText(entry?.mechanism)) &&
     Array.isArray(item.watch) && item.watch.length > 0 &&
     item.watch.every((entry) => isText(entry?.indicator) && isText(entry?.signal)) &&
-    isText(item.analysisHref) && /^\/analysis\/job\/[a-f0-9-]+$/.test(item.analysisHref)
+    isAnalysisHref(item.analysisHref)
   );
 }
 

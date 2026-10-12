@@ -11,8 +11,12 @@ for (const item of available.snapshot.items) {
   assert.ok(item.facts.length > 0, `${item.id}: FACT required`);
   assert.ok(item.inference.length > 0, `${item.id}: INFERENCE required`);
   assert.ok(item.uncertainty.length > 0, `${item.id}: UNCERTAINTY required`);
-  assert.match(item.analysisHref, /^\/analysis\/job\/[a-f0-9-]+$/);
+  assert.match(item.analysisHref, /^\/analysis\?q=/);
 }
+for (const href of ["https://evil.example/", "/analysis?q=unknown", "/analysis?q=美联储为什么降息？#missing", "/analysis?q=美联储为什么降息？&extra=1"]) {
+  assert.throws(() => resolveTodayMarketState({ ...source, items: [{ ...source.items[0], analysisHref: href }] }), /格式不完整/);
+}
+assert.equal(resolveTodayMarketState({ ...source, items: [{ ...source.items[0], analysisHref: "/analysis/job/240b1d4e-efa1-4aad-b626-a82af9aaf19c" }] }).status, "available");
 
 const empty = resolveTodayMarketState({ ...source, items: [] });
 assert.equal(empty.status, "empty");

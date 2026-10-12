@@ -1,37 +1,23 @@
 import nextEnv from "@next/env";
 import { createHmac } from "node:crypto";
-import { createRequire } from "node:module";
-import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
+import { launchBrowser, createBrowserFixtures } from "./browser-test-utils.mjs";
 import path from "node:path";
 
 const { loadEnvConfig } = nextEnv;
 loadEnvConfig(process.cwd());
-const require = createRequire("C:/Users/34352/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/package.json");
-const { chromium } = require("playwright");
 const baseUrl = process.env.MARKETARC_FULL_BASE_URL || "http://localhost:3102";
 const outputDirectory = process.env.MARKETARC_FULL_OUTPUT_DIR || path.join(process.cwd(), "data", "evals", "delivery-v1");
 const jobsDirectory = path.join(process.cwd(), "data", "jobs");
-const sourceId = "dee44a1c-9e39-41b0-bd30-a50c98d55763";
-const fixtureIds = {
-  quick: "33333333-3333-4333-8333-333333333333",
-  partial: "44444444-4444-4444-8444-444444444444",
-  failed: "55555555-5555-4555-8555-555555555555",
-};
-
 await mkdir(outputDirectory, { recursive: true });
-const source = JSON.parse(await readFile(path.join(jobsDirectory, `${sourceId}.json`), "utf8"));
-const fixturePaths = Object.values(fixtureIds).map((id) => path.join(jobsDirectory, `${id}.json`));
-const now = "2026-08-18T09:15:00.000Z";
-const fixtures = [
-  { ...source, id: fixtureIds.quick, status: "analyzing", updatedAt: now, progress: { current: "analyzing", completed: ["research", "researchBrief"] }, partialStoryA: null, partialStoryB: null, analysisStory: null, error: null },
-  { ...source, id: fixtureIds.partial, status: "story_b", updatedAt: now, progress: { current: "story_b", completed: ["research", "researchBrief", "storyA"] }, partialStoryB: null, analysisStory: null, error: null },
-  { ...source, id: fixtureIds.failed, status: "failed", updatedAt: now, progress: { current: "failed", completed: [] }, researchBrief: null, partialStoryA: null, partialStoryB: null, analysisStory: null, error: "LOCAL_REGRESSION_FIXTURE" },
-];
-await Promise.all(fixtures.map((fixture, index) => writeFile(fixturePaths[index], `${JSON.stringify(fixture, null, 2)}\n`, "utf8")));
-
-const browser = await chromium.launch({ headless: true, executablePath: process.env.MARKETARC_BROWSER_PATH || "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe" });
+const browser = await launchBrowser();
+let fixtures;
 const results = { access: {}, api: {}, viewports: [], persistence: {}, fixturesRemoved: false, apiJobsUsed: 0 };
 try {
+  fixtures = await createBrowserFixtures(browser, baseUrl);
+  const fixtureIds = fixtures.ids;
+  const fixturePaths = fixtures.ownedPaths;
+  const sourceId = fixtureIds.complete;
   const accessEnabled = Boolean(process.env.DEMO_ACCESS_CODE?.trim());
   const anonymous = await browser.newContext();
   const anonymousPage = await anonymous.newPage();
@@ -103,6 +89,17 @@ try {
 
     await page.goto(`${baseUrl}/today`, { waitUntil: "networkidle" });
     const today = { items: await page.locator(".today-item").count(), boundaries: await page.locator(".today-boundary").count(), background: await page.locator(".today-market").evaluate((element) => getComputedStyle(element).backgroundColor) };
+    const links = await page.locator(".today-deep-link").evaluateAll((elements) => elements.map((element) => element.getAttribute("href")));
+    for (const href of links) {
+      const linkedPage = await context.newPage();
+      try {
+        const linkedResponse = await linkedPage.goto(new URL(href, baseUrl).href, { waitUntil: "networkidle" });
+        if (linkedResponse.status() !== 200 || await linkedPage.locator(".story-hero").count() !== 1) throw new Error(`Today link has no bundled story: ${href}`);
+        const hash = new URL(href, baseUrl).hash;
+        if (hash && await linkedPage.locator(hash).count() !== 1) throw new Error(`Today link anchor missing: ${href}`);
+      } finally { await linkedPage.close(); }
+    }
+    today.linkedStories = links.length;
     await page.screenshot({ path: path.join(outputDirectory, `${viewport.id}-today.png`), fullPage: true });
 
     await page.goto(`${baseUrl}/map`, { waitUntil: "networkidle" });
@@ -120,7 +117,7 @@ try {
   }
 } finally {
   await browser.close();
-  await Promise.all(fixturePaths.map((file) => rm(file, { force: true })));
+  await fixtures?.cleanup();
   results.fixturesRemoved = true;
   await writeFile(path.join(outputDirectory, "full-product-regression.json"), `${JSON.stringify(results, null, 2)}\n`, "utf8");
 }

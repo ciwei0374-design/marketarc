@@ -50,7 +50,7 @@ export function TodayMarketView({ snapshot }: { snapshot: TodayMarketSnapshot })
                 <div><h3>影响哪些变量</h3><dl>{item.variables.map((entry) => <div key={entry.name}><dt>{entry.name}</dt><dd>{entry.mechanism}</dd></div>)}</dl></div>
                 <div><h3>接下来观察什么</h3><dl>{item.watch.map((entry) => <div key={entry.indicator}><dt>{entry.indicator}</dt><dd>{entry.signal}</dd></div>)}</dl></div>
               </div>
-              <Link className="today-deep-link" href={item.analysisHref}>深入看懂这条机制 <span aria-hidden="true">→</span></Link>
+              <Link className="today-deep-link" href={item.analysisHref}>{item.analysisHref.startsWith("/analysis?q=") ? "阅读相关机制示例（非实时分析）" : "深入看懂这条机制"} <span aria-hidden="true">→</span></Link>
             </article>
           ))}
         </div>

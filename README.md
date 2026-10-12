@@ -1,6 +1,104 @@
-# 资见 AI
+# MarketArc · 资见 AI
 
 新手友好的 AI 投研教育平台，帮助用户把财经事件转化为可理解、可学习的投资知识。
+
+An AI-assisted financial education prototype that explains market mechanisms, expectations, and uncertainty—not stock picks or trading signals.
+
+**项目状态：产品验证期的个人作品。** 内置案例可无 API 试用；任意问题的真实生成仍受外部模型延迟和结构化输出稳定性影响，尚不能作为成熟投研服务使用。
+
+## 为什么做这个产品
+
+财经新闻告诉用户“发生了什么”，却不一定解释“为什么影响资产”和“什么条件会让判断失效”。MarketArc 把研究结果组织为连续阅读的故事：人话解释 → 因果机制 → 资产影响 → 预期差 → 反方条件 → 观察清单 → 可迁移的判断框架。
+
+### 已实现
+
+- 三个随代码提供的完整教育案例：降息、黄金、AI 与电力，无需密钥。
+- 自定义问题的研究链路：来源检索、ResearchBrief、Story A/B、校验与合并。
+- 渐进式结果：先读研究速览，再读 Story A；后续失败保留已生成内容并提供重试入口。
+- 来源链接校验、FACT / INFERENCE / UNCERTAINTY 边界，以及历史快照提示。
+- 响应式长文、“市场研究快照”和三条可切换的投资机制路径。
+- 本地任务持久化、可选体验码、模型 JSON 检查与浏览器回归测试。
+
+### 界面预览
+
+截图来自内置教育案例，不代表实时行情或真实生成成功率。
+
+![桌面首页：输入财经问题并选择教育案例](docs/assets/home-desktop.png)
+
+![预期差：实际结果需要与市场原先预期比较](docs/assets/story-desktop.png)
+
+![投资地图：机制链、资产映射与反方条件](docs/assets/map-desktop.png)
+
+<details>
+<summary>查看移动端核心判断排版</summary>
+
+![移动端黄金案例的核心判断，长文采用正文层级](docs/assets/story-mobile.png)
+
+</details>
+
+## 3 分钟试用（不需要 API）
+
+建议 Node.js 22 LTS 或更新版本。应用最低要求 20.9；包含 `--experimental-strip-types` 的本地测试需要 Node.js 22.6+。
+
+```bash
+git clone https://github.com/ciwei0374-design/marketarc.git
+cd marketarc
+npm ci
+npm run dev -- --port 3101
+```
+
+打开 [本地首页](http://localhost:3101)，选择“美联储为什么降息？”并开始分析，再体验黄金、AI 电力案例、市场快照和投资地图。无需创建 `.env.local`；未配置模型时，自定义问题不能完成真实分析。网站需要本地服务运行，不能直接双击 HTML 或只在 GitHub 上使用。
+
+推荐演示顺序：降息案例 → 预期差模块 → 来源与方法说明 → 投资地图 → 市场快照。内置案例的数字已标为 DEMO DATA，快照显示历史日期。
+
+## 技术与项目贡献
+
+Next.js App Router · React · TypeScript · Tailwind CSS · Zod · 可替换的模型/搜索适配器 · Playwright。
+
+这是 **AI 辅助开发** 的个人产品项目：产品负责人定义用户问题、产品边界、体验反馈、质量标准与优先级；AI 协助代码实现、诊断、测试及文档。不能将仓库描述成完全手写或已有规模化用户验证的产品。
+
+值得展示的决策包括：用条件性判断替代荐股结论；让研究事实与页面文案分层；用渐进式结果降低长等待的不确定感；未通过质量门槛的实验回退。详细背景与取舍见 [项目案例说明](docs/PORTFOLIO_CASE_STUDY.md)，内容标准见 [Product Brain](docs/marketarc/PRODUCT_BRAIN.md)。
+
+## 当前限制与下一步
+
+- **速度和可靠性仍未解决完。** 最近真实测试曾等待数分钟并在 Story B 遭遇 502；也出现过 JSON 校验失败。重试与部分结果不是完整成功的保证。本轮公开作品检查不调用真实 API，不把离线通过当成模型稳定性通过。
+- **内容质量仍在迭代。** 主要弱点是信息密度、有效反方与术语解释；历史评估约 70 分，不宣称专业机构级研究能力。
+- **持久化适合本地原型。** 使用 `data/` 下的 JSON 文件，不是 SQLite；暂无多实例共享任务队列、进程重启续跑或规模化服务保障。不适合直接部署到无持久磁盘的无服务器环境。
+- **不是实时市场终端。** 市场快照为历史教育内容，内置案例为示例；无荐股、自动交易或收益保证。
+
+下一步先验证模型的延迟与结构化输出稳定性，再做小范围内容实验；暂不扩展支付、会员等大型模块。
+
+## 可复现检查（无真实模型调用）
+
+```bash
+npm run lint
+npm run typecheck
+npm run test:model-json
+npm run test:link-integrity
+npm run test:today-market
+npm run test:investment-map
+npm run test:secret-scan
+npm run build
+```
+
+浏览器测试前安装 Chromium，并在独立终端从**同一目录**启动测试服务：
+
+```bash
+npx playwright install chromium
+npm run start -- --port 3102
+```
+
+另一个终端执行：
+
+```bash
+npm run test:full-product
+npm run test:story-ux
+npm run test:responsive
+```
+
+默认连接 `http://localhost:3102`，不会启动、停止或重启其他服务。夹具只使用 Golden Story、随机 ID 和本轮拥有的临时 JSON，结束后清理；截图和报告存于被忽略的 `data/evals/`。测试覆盖桌面/手机完整流程、四场景 × 七视口排版；这是离线界面验证，不测真实模型输出质量。
+
+已安装 Edge 的 Windows 用户可在 PowerShell 中设置 `$env:MARKETARC_BROWSER_CHANNEL="msedge"`，无需下载 Chromium；其他系统使用默认 Chromium。指定服务器时分别设置 `MARKETARC_FULL_BASE_URL`、`MARKETARC_UX_BASE_URL`、`MARKETARC_VISUAL_BASE_URL`。`npm run docs:screenshots` 更新文档截图，默认也连接 3102。
 
 ## 本地开发
 
@@ -95,12 +193,16 @@ npm run build
 - `src/lib`：底层工具与基础设施代码
 - `src/services`：业务服务与外部接口封装
 - `src/types`：共享 TypeScript 类型
-- `data`：SQLite 数据库及其他本地业务数据
+- `data`：内置教育案例、版本化市场数据，以及本地 JSON 任务和缓存
 - `public`：静态资源
 
-SQLite 数据库统一使用 `data/app.db`。数据库文件不提交 Git，但 `data` 目录通过 `.gitkeep` 保留。
+运行数据位于 `data/jobs`、`data/research`、`data/briefs`、`data/generated`，不提交 Git；内置案例与版本化市场数据随源码提供。当前没有数据库依赖。
 
 ## 架构决定
+
+### Portable Portfolio & Regression V1
+
+公开仓库的首次体验不依赖私人任务或本机浏览器依赖路径。“市场研究快照”保留历史内容，其公开导航改为明确标注的相关 Golden Story 机制示例；不是恢复原始私有研究结果。浏览器测试使用项目依赖 Playwright、随机临时夹具及实际页面断言，缺失页面必须失败。`.worktrees` 与历史 Nightly 工作树排除在主项目类型检查之外；Turbopack 根目录显式限定为运行项目，避免嵌套检出误读父目录依赖。以下条目保留演进记录，现状以当前代码和上述限制为准。
 
 ### MarketArc Evidence and Readability Guard V1
 
@@ -127,9 +229,9 @@ Manager/Engineer 自动化使用官方持久 Codex CLI session 流程（`codex e
 - Demo Access Gate：可选的 `DEMO_ACCESS_CODE` 启用统一访问保护。验证状态使用 HttpOnly Cookie 保存，页面及真实分析 API 均由服务端校验；未配置时保持本地直达体验。
 
 - 使用 Next.js App Router、TypeScript 和 Tailwind CSS，兼顾快速迭代与长期维护。
-- 使用 SQLite 作为本地数据库，所有持久化业务数据均保存在项目根目录内。
+- 使用项目内的 JSON 文件持久化任务与缓存；早期 SQLite 规划未实现。
 - 使用 Tailwind CSS v4 的 PostCSS 集成，减少初期配置文件数量。
-- MVP 使用 Client Component 处理首页输入、校验与约 1 秒加载反馈，通过 `/analysis?q=...` 将问题传递给结果页。
+- MVP 初期通过 `/analysis?q=...` 展示案例；当前提交走 `/api/analyze` 创建持久任务，页面逐步展示结果。
 - 三个内置案例来自项目内的 `data/analysis`；未匹配问题在 AI 服务配置后交由 Provider 生成，并把结果缓存到项目内。
 - 页面采用深色、克制的金融科技视觉，主要交互不依赖第三方 UI 或动画库。
 - “美联储为什么降息？”使用独立的 MarketArc 长篇叙事模板，以连续滚动、CSS 解释型视觉和预期差案例取代通用报告卡片；其他 Mock 暂时保留原模板。

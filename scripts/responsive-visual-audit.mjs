@@ -1,14 +1,11 @@
 import nextEnv from "@next/env";
 import { createHmac } from "node:crypto";
-import { createRequire } from "node:module";
+import { launchBrowser, createBrowserFixtures } from "./browser-test-utils.mjs";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 const { loadEnvConfig } = nextEnv;
 loadEnvConfig(process.cwd());
-const bundledNodeModules = "C:/Users/34352/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules";
-const require = createRequire(`${bundledNodeModules}/package.json`);
-const { chromium } = require("playwright");
 
 const baseUrl = process.env.MARKETARC_VISUAL_BASE_URL || "http://localhost:3102";
 const outputDirectory = process.env.MARKETARC_VISUAL_OUTPUT_DIR || path.join(process.cwd(), "data", "evals", "responsive");
@@ -28,12 +25,12 @@ const viewports = [
 ];
 
 await mkdir(outputDirectory, { recursive: true });
-const browser = await chromium.launch({
-  headless: true,
-  executablePath: process.env.MARKETARC_BROWSER_PATH || "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe",
-});
+const browser = await launchBrowser();
+let fixtures;
 const results = [];
 try {
+  fixtures = await createBrowserFixtures(browser, baseUrl);
+  allPages.find((page) => page.id === "progress").path = `/analysis/job/${fixtures.ids.quick}`;
   for (const viewport of viewports) {
     const context = await browser.newContext({ viewport });
     const code = process.env.DEMO_ACCESS_CODE?.trim();
@@ -48,7 +45,8 @@ try {
         if (response.status() >= 400 && /\.(css|js)(\?|$)/.test(response.url())) failedAssets.push({ url: response.url(), status: response.status() });
       };
       page.on("response", recordFailedResponse);
-      await page.goto(`${baseUrl}${target.path}`, { waitUntil: "networkidle" });
+      const response = await page.goto(`${baseUrl}${target.path}`, { waitUntil: "networkidle" });
+      if (response.status() !== 200) throw new Error(`Page missing: ${target.path}`);
       const metrics = await page.evaluate(() => {
         const expectation = document.querySelector(".expectation-statement");
         const finale = document.querySelector(".finale-flow");
@@ -121,6 +119,7 @@ try {
   }
 } finally {
   await browser.close();
+  await fixtures?.cleanup();
 }
 
 const resultPath = path.join(outputDirectory, `${label}-metrics.json`);

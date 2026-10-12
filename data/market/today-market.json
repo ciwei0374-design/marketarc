@@ -6,7 +6,7 @@
   "freshnessLabel": "本地研究快照 · 截至 13:05",
   "title": "今天市场，先看这三种力量",
   "lead": "利率决定估值的水位，美元改变全球资金的压力，财报则检验市场预期。先看机制，再看涨跌。",
-  "methodology": "本页整理自快照日期已完成的 MarketArc 研究任务，不是实时行情或新闻聚合。FACT 仅陈述研究输入与可观察机制；INFERENCE 是基于这些事实的解释；UNCERTAINTY 提醒哪些条件可能让解释失效。",
+  "methodology": "本页整理自快照日期已完成的 MarketArc 研究任务，不是实时行情或新闻聚合。FACT 仅陈述研究输入与可观察机制；INFERENCE 是基于这些事实的解释；UNCERTAINTY 提醒哪些条件可能让解释失效。相关链接进入随项目提供的教育机制示例，不是原始研究任务或实时分析。",
   "items": [
     {
       "id": "rates-and-tech",
@@ -29,7 +29,7 @@
         { "indicator": "10Y 美债与实际利率", "signal": "两者是否同向抬升" },
         { "indicator": "科技公司盈利预期", "signal": "是否足以覆盖资金成本变化" }
       ],
-      "analysisHref": "/analysis/job/240b1d4e-efa1-4aad-b626-a82af9aaf19c"
+      "analysisHref": "/analysis?q=美联储为什么降息？#stock-valuation"
     },
     {
       "id": "dollar-pressure",
@@ -52,7 +52,7 @@
         { "indicator": "DXY 与 10Y 实际利率", "signal": "是否形成同向压力" },
         { "indicator": "新兴市场非居民资金流", "signal": "资金是观望还是持续撤出" }
       ],
-      "analysisHref": "/analysis/job/c627a251-72b5-4b6c-a50f-f8beeca6c7e5"
+      "analysisHref": "/analysis?q=黄金为什么持续上涨？"
     },
     {
       "id": "earnings-expectations",
@@ -75,7 +75,7 @@
         { "indicator": "下一季收入与毛利率指引", "signal": "预期是否继续上修" },
         { "indicator": "客户资本开支节奏", "signal": "需求持续性是否被验证" }
       ],
-      "analysisHref": "/analysis/job/dee44a1c-9e39-41b0-bd30-a50c98d55763"
+      "analysisHref": "/analysis?q=AI 为什么会带动电力需求？#expectations"
     }
   ]
 }
